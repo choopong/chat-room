@@ -31,7 +31,7 @@
     </form>
     <div id="messages" v-show="isConnnected">
       <div v-for="(message, i) in messages" :key="i">
-        {{ message.user }} / {{ message.time }} : {{ message.message }}
+        [{{ message.user }} - {{ message.time }}] {{ message.message }}
       </div>
     </div>
     <div v-show="isConnnected">
