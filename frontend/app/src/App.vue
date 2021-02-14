@@ -180,7 +180,7 @@ html, body, #app {
   width: 150px;
 }
 #message {
-  width: 500px;
+  width: 300px;
 }
 #messages {
   padding: 10px;
