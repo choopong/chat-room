@@ -75,7 +75,6 @@ export default {
     this.loadRecent();
     this.reset();
     this.clearError();
-    this.autoScroll();
   },
   methods: {
     loadRecent() {
@@ -90,12 +89,6 @@ export default {
     },
     clearError() {
       setInterval(() => (this.error = ""), 3000);
-    },
-    autoScroll() {
-      setInterval(() => {
-        const messagesEl = document.getElementById("messages");
-        messagesEl.scrollTop = messagesEl.scrollHeight;
-      }, 500);
     },
     genUsername() {
       const characters = [
@@ -149,6 +142,10 @@ export default {
       this.source.onmessage = (event) => {
         console.log(event);
         this.messages.push(JSON.parse(event.data));
+        this.$nextTick(() => {
+          const messagesEl = document.getElementById("messages");
+          messagesEl.scrollTop = messagesEl.scrollHeight;
+        });
       };
     },
     disconnect() {
