@@ -25,7 +25,7 @@
           v-show="isConnnected"
           v-on:click="disconnect"
         />
-        <span id="error">{{ error }}</span>
+        &nbsp;<span id="error">{{ error }}</span>
       </p>
       <hr />
     </form>
@@ -88,7 +88,7 @@ export default {
       }
     },
     clearError() {
-      setInterval(() => (this.error = ""), 3000);
+      setInterval(() => this.error = "", 3000);
     },
     genUsername() {
       const characters = [
@@ -124,9 +124,7 @@ export default {
       localStorage.server = this.server;
       localStorage.user = this.user;
       this.isConnnected = true;
-      this.$nextTick(() => {
-        document.getElementById("message").focus();
-      });
+      this.$nextTick(() => document.getElementById("message").focus());
       this.source = new EventSource(this.server + "/message");
       this.source.onerror = (event) => {
         console.log(event);
@@ -149,7 +147,13 @@ export default {
         user: user,
         message: message,
       };
-      axios.post(this.server + "/message", data).then((this.message = ""));
+      axios
+        .post(this.server + "/message", data)
+        .then(() => this.message = "")
+        .catch((error) => {
+          console.log(error);
+          this.error = error;
+        });
     },
     disconnect() {
       this.source.close();
