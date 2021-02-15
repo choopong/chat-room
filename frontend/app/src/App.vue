@@ -3,14 +3,14 @@
     <form v-on:submit.prevent="connect">
       <p>
         <label for="user">User: </label>
-          <input
-            id="user"
-            type="text"
-            v-model="user"
-            placeholder="Your name is here"
-            maxlength="50"
-            :disabled="isConnnected"
-          />
+        <input
+          id="user"
+          type="text"
+          v-model="user"
+          placeholder="Your name is here"
+          maxlength="50"
+          :disabled="isConnnected"
+        />
         &nbsp;<label for="server">Chat Server: </label>
         <input
           id="server"
@@ -80,10 +80,10 @@ export default {
     loadRecent() {
       this.server = localStorage.server;
       this.user = localStorage.user;
-      if(this.server === undefined) {
+      if (this.server === undefined) {
         this.server = "https://chat-room-be.herokuapp.com";
       }
-      if(this.user === undefined) {
+      if (this.user === undefined) {
         this.user = this.genUsername();
       }
     },
@@ -113,17 +113,12 @@ export default {
       return this.user !== "" && this.message != "";
     },
     send() {
-      const data = {
-        user: this.user,
-        message: this.message,
-      };
-      axios.post(this.server + "/message", data).then((this.message = ""));
+      this.sendMessageToServer(this.user, this.message);
     },
     reset() {
       this.isConnnected = false;
       this.source = null;
       this.message = "";
-      this.messages = [];
     },
     connect() {
       localStorage.server = this.server;
@@ -147,6 +142,14 @@ export default {
           messagesEl.scrollTop = messagesEl.scrollHeight;
         });
       };
+      this.sendMessageToServer(this.user, "Connnected to " + this.server);
+    },
+    sendMessageToServer(user, message) {
+      const data = {
+        user: user,
+        message: message,
+      };
+      axios.post(this.server + "/message", data).then((this.message = ""));
     },
     disconnect() {
       this.source.close();
@@ -160,12 +163,14 @@ export default {
 * {
   font-family: Verdana;
 }
-html, body, #app {
+html,
+body,
+#app {
   height: 100%;
 }
 #app {
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
 }
 #error {
   color: #f00;
