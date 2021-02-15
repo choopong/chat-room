@@ -9,32 +9,32 @@
           v-model="user"
           placeholder="Your name is here"
           maxlength="50"
-          :disabled="isConnnected"
+          :disabled="isConnected"
         />
         &nbsp;<label for="server">Chat Server: </label>
         <input
           id="server"
           type="text"
           v-model="server"
-          :disabled="isConnnected"
+          :disabled="isConnected"
         />
-        &nbsp;<input type="submit" value="Connect" v-show="!isConnnected" />
+        &nbsp;<input type="submit" value="Connect" v-show="!isConnected" />
         &nbsp;<input
           type="button"
           value="Disconnect"
-          v-show="isConnnected"
+          v-show="isConnected"
           v-on:click="disconnect"
         />
         &nbsp;<span id="error">{{ error }}</span>
       </p>
       <hr />
     </form>
-    <div id="messages" v-show="isConnnected">
+    <div id="messages" v-show="isConnected">
       <div v-for="(message, i) in messages" :key="i">
         [{{ message.user }} - {{ message.time }}] {{ message.message }}
       </div>
     </div>
-    <div v-show="isConnnected">
+    <div v-show="isConnected">
       <hr />
       <form v-on:submit.prevent="send">
         <p>
@@ -61,7 +61,7 @@ export default {
   name: "App",
   data() {
     return {
-      isConnnected: false,
+      isConnected: false,
       server: "",
       user: "",
       message: "",
@@ -116,19 +116,19 @@ export default {
       this.sendMessageToServer(this.user, this.message);
     },
     reset() {
-      this.isConnnected = false;
+      this.isConnected = false;
       this.source = null;
       this.message = "";
     },
     connect() {
       localStorage.server = this.server;
       localStorage.user = this.user;
-      this.isConnnected = true;
+      this.isConnected = true;
       this.$nextTick(() => document.getElementById("message").focus());
       this.source = new EventSource(this.server + "/message");
       this.source.onerror = (event) => {
         console.log(event);
-        this.isConnnected = false;
+        this.isConnected = false;
         this.error = "Failed to Connect";
         this.disconnect();
       };
@@ -140,7 +140,7 @@ export default {
           messagesEl.scrollTop = messagesEl.scrollHeight;
         });
       };
-      this.sendMessageToServer(this.user, "Connnected to " + this.server);
+      this.sendMessageToServer(this.user, "Connected to " + this.server);
     },
     sendMessageToServer(user, message) {
       const data = {
