@@ -1,0 +1,58 @@
+swagger: "2.0"
+info:
+  version: "0.1.0"
+  title: "Chat API for LINE Incubation Program (Solution Engineer)"
+host: "chat-room-be.herokuapp.com"
+externalDocs:
+  description: "Mock Client"
+  url: "https://chat-room-fe.herokuapp.com/"
+schemes:
+- "https"
+paths:
+  /message:
+    post:
+      tags:
+      - "message"
+      summary: "To submit message to the chat server"
+      operationId: "postMessage"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          type: "object"
+          required:
+          - "user"
+          - "message"
+          properties:
+            user:
+              type: "string"
+              example: "Brown"
+            message:
+              type: "string"
+              example: "Hello World!"
+      responses:
+        "200":
+          description: "OK"
+        "400":
+          description: "Bad Request"
+    get:
+      tags:
+      - "message"
+      summary: "To stream messages from the chat server"
+      description: ""
+      operationId: "getMessage"
+      produces:
+      - "text/event-stream"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: "string"
+            example: |
+              event: message
+              data: {"user":"Admin","message":"test","time":"17 Feb 23:26:14"}
